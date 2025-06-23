@@ -10,8 +10,6 @@ WORKDIR /app
 # ENV DATABASE_URL=$DATABASE_URL
 
 COPY package.json yarn.lock ./
-RUN corepack enable && \
-		yarn set version stable
 RUN yarn install
 
 COPY . .
