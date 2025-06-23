@@ -4,7 +4,6 @@
   "private": true,
   "license": "MIT",
   "type": "module",
-  "packageManager": "yarn@4.9.2",
   "scripts": {
     "dev": "nuxt dev",
     "prebuild": "nuxt prepare",
