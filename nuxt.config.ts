@@ -38,9 +38,6 @@ export default defineNuxtConfig({
     },
     externals: {
       external: [
-        ".prisma", // ignore Prisma internals
-        "@prisma/client", // don't bundle Prisma
-        "prisma", // don't bundle Prisma CLI
         "process", // Node.js process module
       ],
     },
