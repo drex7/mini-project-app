@@ -1,7 +1,7 @@
 import { S3Client, ListObjectsV2Command } from '@aws-sdk/client-s3'
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig().private
+  const config = useRuntimeConfig(event)
   const query = getQuery(event)
   const page = parseInt(query.page as string) || 1
   const pageSize = parseInt(query.pageSize as string) || 12

@@ -19,8 +19,7 @@ COPY . .
 # Run Prisma migrations
 
 # Build application
-RUN --mount=type=secret,id=db-url-id,env=DATABASE_URL \ 
-		yarn build
+RUN yarn build
 
 # Stage 2: Runtime
 FROM node:20-alpine AS runner
