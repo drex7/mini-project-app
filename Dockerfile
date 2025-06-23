@@ -16,8 +16,6 @@ RUN yarn install
 
 COPY . .
 
-# Run Prisma migrations
-
 # Build application
 RUN yarn build
 
