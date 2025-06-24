@@ -44,6 +44,10 @@ jobs:
           # docker tag $IMAGE_TAG:latest $REPOSITORY:$IMAGE_TAG
           docker image push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
-      # - name: Tag Docker image
-      #   run: |
-      #     docker tag $IMAGE_TAG:latest $ECR_REPOSITORY:$IMAGE_TAG
+      - name: Deploy to ECS with CodeDeploy
+        uses: aws-actions/aws-codedeploy-deploy@v1
+        with:
+          application-name: GalleryAppCodeDeploy
+          deployment-group-name: GalleryAppDeploymentGroup
+          task-definition: task-definition.json
+          appspec: appspec.yml
