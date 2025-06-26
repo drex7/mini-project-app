@@ -1,4 +1,5 @@
 import { S3Client, ListObjectsV2Command } from '@aws-sdk/client-s3'
+import { getS3Client } from '~/lib/s3Config'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event)
@@ -7,13 +8,7 @@ export default defineEventHandler(async (event) => {
   const pageSize = parseInt(query.pageSize as string) || 12
 
 
-  const s3Client = new S3Client({
-    region: config.awsRegion,
-    credentials: {
-      accessKeyId: config.awsAccessKeyId,
-      secretAccessKey: config.awsSecretAccessKey,
-    },
-  })
+  const s3Client = getS3Client(config);
 
   const command = new ListObjectsV2Command({
     Bucket: config.awsS3Bucket,

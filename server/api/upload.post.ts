@@ -1,17 +1,13 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import { getS3Client } from '~/lib/s3Config'
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig()
+  const config = useRuntimeConfig(event)
+
   const body = await readBody(event)
 
-  const s3Client = new S3Client({
-    region: config.awsRegion,
-    credentials: {
-      accessKeyId: config.awsAccessKeyId,
-      secretAccessKey: config.awsSecretAccessKey,
-    },
-  })
+  const s3Client = getS3Client(config)
 
   const key = `images/${Date.now()}-${body.filename}`
   console.dir(body);
@@ -22,6 +18,6 @@ export default defineEventHandler(async (event) => {
   })
 
   const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 })
-  // console.log(`Generated signed URL: ${url}`)
+  
   return { url, key }
 })
