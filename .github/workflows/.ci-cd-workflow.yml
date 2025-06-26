@@ -19,7 +19,8 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    
+    outputs:
+      image: ${{ steps.build-image.outputs.image }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
