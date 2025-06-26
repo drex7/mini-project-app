@@ -10,17 +10,18 @@ on:
 env:
   IMAGE_TAG: ${{ github.sha }}
   ECS_TASK_DEFINITION: "gallery-app-task-definition"
-  CONTAINER_NAME: 'GalleryAppContainer'
-  SERVICE_NAME: 'gallery-app-task-definition-service'
-  CODEDEPLOY_DEPLOYMENT_GROUP: 'GalleryAppDeploymentGroup'
-  CLUSTER_NAME: 'mini-project-1-cluster'
-  CODEDEPLOY_APPLICATION: 'GalleryAppCodeDeployApplication'
-  
+  CONTAINER_NAME: "GalleryAppContainer"
+  SERVICE_NAME: "gallery-app-task-definition-service"
+  CODEDEPLOY_DEPLOYMENT_GROUP: "GalleryAppDeploymentGroup"
+  CLUSTER_NAME: "mini-project-1-cluster"
+  CODEDEPLOY_APPLICATION: "GalleryAppCodeDeployApplication"
+
 jobs:
-  build-and-push:
+  build-and-push-job:
     runs-on: ubuntu-latest
     outputs:
       image: ${{ steps.build-image.outputs.image }}
+      image1: ${{ steps.build-image.outputs.image_test }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -50,14 +51,30 @@ jobs:
           # docker tag $IMAGE_TAG:latest $ECR_REPOSITORY:$IMAGE_TAG
           docker image push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "ECR_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+          echo "image_test=testing-image" >> "$GITHUB_OUTPUT"
 
-  deploy-blue-green:
+  deploy-blue-green-job:
     runs-on: ubuntu-latest
-    needs: build-and-push
+    needs: build-and-push-job
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Debug variables
+        env:
+          image_env: ${{ needs.build-and-push-job.outputs.image }}
+          image_env1: ${{ needs.build-and-push-job.outputs.image1 }}
+        run: |
+          echo "ECR_IMAGE: ${{ needs.build-and-push-job.outputs.image }}"
+          echo "ECR_IMAGE_TEST: ${{ needs.build-and-push-job.outputs.image1 }}"
+          echo "ECR_IMAGE_env: ${{ env.image_env }}"
+          echo "ECR_IMAGE_env1: ${{ env.image_env1 }}"
+          echo "CONTAINER_NAME: ${{ env.CONTAINER_NAME }}"
+          echo "SERVICE_NAME: ${{ env.SERVICE_NAME }}"
+          echo "CLUSTER_NAME: ${{ env.CLUSTER_NAME }}"
+          echo "CODEDEPLOY_APPLICATION: ${{ env.CODEDEPLOY_APPLICATION }}"
+          echo "CODEDEPLOY_DEPLOYMENT_GROUP: ${{ env.CODEDEPLOY_DEPLOYMENT_GROUP }}"
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
@@ -65,7 +82,7 @@ jobs:
         with:
           task-definition: task-definition.json
           container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ needs.build-and-push.outputs.image }}
+          image: ${{ needs.build-and-push-job.outputs.image }}
 
       - name: Deploy to Amazon ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
