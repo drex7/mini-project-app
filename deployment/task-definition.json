@@ -1,8 +1,8 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:eu-central-1:985539763589:task-definition/gallery-app-task-definition",
     "containerDefinitions": [
         {
             "name": "GalleryAppContainer",
+            "image": "{{IMAGE_URL}}",
             "cpu": 0,
             "portMappings": [
                 {
@@ -17,7 +17,7 @@
             "environment": [
                 {
                     "name": "NUXT_AWS_S3_BUCKET",
-                    "value": "gallery-app-bucket-88544"
+                    "value": "webapp-images-985539763589"
                 }
             ],
             "mountPoints": [],
@@ -38,45 +38,9 @@
         }
     ],
     "family": "gallery-app-task-definition",
-    "taskRoleArn": "galleryAppTaskRole",
-    "executionRoleArn": "galleryAppTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::${AWS::AccountId}:role/galleryAppTaskExecutionRole",
+    "taskRoleArn": "arn:aws:iam::${AWS::AccountId}:role/galleryAppTaskRole",
     "networkMode": "awsvpc",
-    "revision": 13,
-    "volumes": [],
-    "status": "ACTIVE",
-    "requiresAttributes": [
-        {
-            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
-        },
-        {
-            "name": "ecs.capability.execution-role-awslogs"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.28"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.task-iam-role"
-        },
-        {
-            "name": "ecs.capability.secrets.ssm.environment-variables"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
-        },
-        {
-            "name": "ecs.capability.task-eni"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
-        }
-    ],
-    "placementConstraints": [],
-    "compatibilities": [
-        "FARGATE"
-    ],
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
@@ -85,6 +49,5 @@
         "FARGATE"
     ],
     "cpu": "256",
-    "memory": "512",
-    "enableFaultInjection": false
+    "memory": "512"
 }
