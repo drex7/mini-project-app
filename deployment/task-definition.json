@@ -38,8 +38,8 @@
         }
     ],
     "family": "gallery-app-task-definition",
-    "executionRoleArn": "arn:aws:iam::${AWS::AccountId}:role/galleryAppTaskExecutionRole",
-    "taskRoleArn": "arn:aws:iam::${AWS::AccountId}:role/galleryAppTaskRole",
+    "executionRoleArn": "galleryAppTaskExecutionRole",
+    "taskRoleArn": "galleryAppTaskRole",
     "networkMode": "awsvpc",
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
