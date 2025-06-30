@@ -26,12 +26,11 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/ecs/gallery-app-task-definition",
+                    "awslogs-group": "/ecs/GalleryApp-Task",
                     "mode": "non-blocking",
-                    "awslogs-create-group": "true",
                     "max-buffer-size": "25m",
                     "awslogs-region": "eu-central-1",
-                    "awslogs-stream-prefix": "galleryapp"
+                    "awslogs-stream-prefix": "ecs"
                 }
             },
             "systemControls": []

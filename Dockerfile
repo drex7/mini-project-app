@@ -10,7 +10,7 @@ WORKDIR /app
 # ENV DATABASE_URL=$DATABASE_URL
 
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn cache clean && yarn install
 
 COPY . .
 
