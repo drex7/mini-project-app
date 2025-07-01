@@ -52,7 +52,7 @@ jobs:
 
       - name: Build, tag and push image to Amazon ECR
         id: build-image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: true
           tags: ${{ steps.generate-img-name.outputs.image_name }}
@@ -60,6 +60,10 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
+          build-args: |
+            DOCKER_ENV=production
+          secrets: |
+            aws_region=${{ secrets.AWS_REGION }}
 
   deploy-blue-green:
     runs-on: ubuntu-latest

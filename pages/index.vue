@@ -30,11 +30,20 @@
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8"
       >
         <div v-for="image in images" :key="image.key" class="relative">
+          
           <img
             :src="image.url"
             :alt="image.key"
             class="w-full h-48 object-cover rounded"
           />
+          <button
+            @click="handleDelete(image.key)"
+            class="absolute top-2 right-2 bg-red-500 text-white rounded px-2 py-1 text-xs hover:bg-red-700"
+            :disabled="loading"
+            title="Delete"
+          >
+            Delete
+          </button>
         </div>
       </div>
       <div v-else class="text-center py-8">
@@ -66,7 +75,7 @@
 </template>
 
 <script setup>
-const { uploadImageS3, getImages } = useS3();
+const { uploadImageS3, getImages, deleteImage } = useS3();
 const selectedFile = ref(null);
 const fileInput = ref(null);
 const images = ref([]);
@@ -91,10 +100,10 @@ const uploadImage = async () => {
   loading.value = true;
   try {
     await uploadImageS3(selectedFile.value);
-    await fetchImages(1); // Reset to page 1 after upload
     selectedFile.value = null;
     fileInput.value.value = ""; // Clear the file input
     alert("Image uploaded successfully!");
+    await fetchImages(1); // Reset to page 1 after upload
   } catch (error) {
     alert("Upload failed!");
     console.error("Upload error:", error);
@@ -113,6 +122,23 @@ const fetchImages = async (page) => {
     isLoadingImages.value = false;
   } catch (error) {
     alert("Failed to load images!");
+  }
+};
+
+const handleDelete = async (key) => {
+  if (!confirm("Are you sure you want to delete this image?")) return;
+
+  loading.value = true;
+  try {
+    await deleteImage(key);
+    await fetchImages(currentPage.value); // Refresh the current page
+    alert("Image deleted successfully!");
+    fetchImages(currentPage.value); // Refresh images after deletion
+  } catch (error) {
+    alert("Failed to delete image!");
+    console.error("Delete error:", error);
+  } finally {
+    loading.value = false;
   }
 };
 

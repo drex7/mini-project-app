@@ -8,6 +8,7 @@ export default defineNuxtConfig({
       awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       awsRegion: process.env.AWS_REGION,
       awsS3Bucket: process.env.AWS_S3_BUCKET,
+      nodeEnv: process.env.NODE_ENV || "development",
   },
   compatibilityDate: "2025-06-10",
   // Disable strict

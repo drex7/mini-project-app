@@ -13,9 +13,13 @@ COPY package.json yarn.lock ./
 RUN yarn cache clean && yarn install
 
 COPY . .
+ENV PORT=3000
+ARG DOCKER_ENV
+ENV NODE_ENV=${DOCKER_ENV}
 
-# Build application
-RUN yarn build
+# Build application for production
+RUN --mount=type=secret,id=aws_region,env=AWS_REGION \
+		yarn build
 
 # Stage 2: Runtime
 FROM node:20-alpine AS runner
@@ -26,8 +30,9 @@ WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.output ./.output
 COPY --from=builder /app/.nuxt ./.nuxt
-COPY --from=builder /app/package.json ./	 
+COPY --from=builder /app/package.json ./
 
-EXPOSE 3000
+
+EXPOSE ${PORT}
 
 CMD ["yarn", "start"]

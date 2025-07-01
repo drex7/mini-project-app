@@ -1,11 +1,9 @@
 export const useS3 = () => {
-  const config = useRuntimeConfig().private;
 
   const uploadImageS3 = async (file: File) => {
     try {
-			console.log("Uploading file:", file);
 
-			const respone = await fetch("/api/upload", {
+			const respone = await fetch("/api/image", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -33,7 +31,7 @@ export const useS3 = () => {
   const getImages = async (page: number, pageSize: number) => {
     try {
       const response = await $fetch(
-        `/api/images?page=${page}&pageSize=${pageSize}`
+        `/api/image?page=${page}&pageSize=${pageSize}`
       );
       return response;
     } catch (error) {
@@ -42,5 +40,19 @@ export const useS3 = () => {
     }
   };
 
-  return { uploadImageS3, getImages };
+  const deleteImage = async (key: string) => {
+    try {
+      const response = await fetch(`/api/image?key=${key}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      return response;
+    } catch (error) {
+      console.error("Failed to delete image:", error);
+      throw error;
+    }
+  };
+
+  return { uploadImageS3, getImages, deleteImage };
 };

@@ -16,8 +16,12 @@
             "essential": true,
             "environment": [
                 {
-                    "name": "NUXT_AWS_S3_BUCKET",
+                    "name": "AWS_S3_BUCKET",
                     "value": "webapp-images-985539763589"
+                },
+                {
+                    "name": "NODE_ENV",
+                    "value": "production"
                 }
             ],
             "mountPoints": [],
