@@ -14,7 +14,7 @@ env:
   CONTAINER_NAME: GalleryAppContainer
   SERVICE_NAME: gallery-app-task-definition-service
   CODEDEPLOY_DEPLOYMENT_GROUP: GalleryAppDeploymentGroup
-  CLUSTER_NAME: mini-project-1-cluster
+  CLUSTER_NAME: GalleryAppCluster
   CODEDEPLOY_APPLICATION: GalleryAppCodeDeployApplication
 
 jobs:
